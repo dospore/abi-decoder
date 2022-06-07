@@ -11,7 +11,6 @@ const knownNetworks = [421611];
 const providers = {
     '42161': 'https://arb-mainnet.g.alchemy.com/v2/g9udwmlsS0yy_rx_he5QABNq0poIKnzq',
     '421611': 'https://arb-rinkeby.g.alchemy.com/v2/ltKzsemL_EEefOWvo_hQHDgW9cKONX4M'
-
 }
 
 const network = args.network;
@@ -36,14 +35,19 @@ Object.values(abis).forEach((abi) => {
 
 const decode = async () => {
     transactions.forEach(async (txnHash) => {
-        const receipt = await provider.getTransactionReceipt(txnHash);
+        const [txn, receipt] = await Promise.all([
+            provider.getTransaction(txnHash),
+            provider.getTransactionReceipt(txnHash)
+        ])
         if (!receipt) {
             console.log("Failed to fetch transaction receipt");
             return;
         }
+        const decodedMethod = abiDecoder.decodeMethod(txn.data);
         const decodedLogs = abiDecoder.decodeLogs(receipt.logs);
         console.log('\n\n')
         console.log(`Logs for ${txnHash}`)
+        console.log(util.inspect(decodedMethod, {showHidden: false, depth: null, colors: true}))
         console.log(util.inspect(decodedLogs, {showHidden: false, depth: null, colors: true}))
         console.log('\n\n')
     })
