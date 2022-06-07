@@ -1,0 +1,16 @@
+{
+  "name": "abi-decoder",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "decode": "node index.js"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "abi-decoder": "^2.4.0",
+    "ethers": "^5.6.8",
+    "util": "^0.12.4",
+    "yargs": "^17.5.1"
+  }
+}
